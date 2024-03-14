@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CharterdOne | Create Blog-Post</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.tiny.cloud/1/mvkqn369dw7k4gc9206ay425577gyz5ven0euaj5a0cfssxm/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: 'textarea',
+      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      tinycomments_mode: 'embedded',
+      tinycomments_author: 'Author name',
+      mergetags_list: [
+        { value: 'First.Name', title: 'First Name' },
+        { value: 'Email', title: 'Email' },
+      ],
+      ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+    });
+  </script>
+  <style>
+    *{
+      font-family: 'Montserrat', sans-serif;
+    }
+    :root {
+    --navbar-bg-color: hsl(0, 0%, 15%);
+    --navbar-text-color: hsl(0, 0%, 85%);
+    --navbar-text-color-focus: white;
+    --navbar-bg-contrast: hsl(0, 0%, 25%);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 95%;
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#navbar {
+    --navbar-height: 64px;
+    height: var(--navbar-height);
+    background-color: var(--navbar-bg-color);
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+}
+
+.home-link,
+.navbar-link {
+    color: var(--navbar-text-color);
+    transition: color 0.2s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    font-weight: 500;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out,
+                color 0.2s ease-in-out;
+}
+
+.home-link:focus,
+.home-link:hover {
+    color: var(--navbar-text-color-focus);
+}
+
+.navbar-link {
+    justify-content: center;
+    padding: 0.5em 1em;
+    border-radius: 4px;    
+    border: 1px solid #fff;
+    letter-spacing: .5px;
+    text-transform: capitalize;
+}
+
+.navbar-link:focus,
+.navbar-link:hover {
+    color: var(--navbar-text-color-focus);
+    background-color: var(--navbar-bg-contrast);
+}
+
+.navbar-logo {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: .5px;
+    font-size: 1.6rem;
+    text-decoration: none;
+  }
+  .navbar-logo span{
+    color: #f5b402;
+}
+.navbar-logo small{
+    font-size: 1.6rem;
+}
+
+.navbar-toggle {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.icon-bar {
+    display: block;
+    width: 25px;
+    height: 4px;
+    margin: 2px;
+    transition: background-color 0.2s ease-in-out,
+                transform 0.2s ease-in-out,
+                opacity 0.2s ease-in-out;
+    background-color: var(--navbar-text-color);
+}
+
+.navbar-toggle:focus .icon-bar,
+.navbar-toggle:hover .icon-bar {
+    background-color: var(--navbar-text-color-focus);
+}
+
+
+#navbar.opened .navbar-toggle .icon-bar:first-child,
+#navbar.opened .navbar-toggle .icon-bar:last-child {
+    position: absolute;
+    margin: 0;
+    width: 30px;
+}
+
+#navbar.opened .navbar-toggle .icon-bar:first-child {
+    transform: rotate(45deg);
+}
+
+#navbar.opened .navbar-toggle .icon-bar:nth-child(2) {
+    opacity: 0;
+}
+
+#navbar.opened .navbar-toggle .icon-bar:last-child {
+    transform: rotate(-45deg);
+}
+
+#navbar-menu {
+    position: fixed;
+    top: var(--navbar-height);
+    bottom: 0;
+    transition: opacity 0.2s ease-in-out,
+                visibility 0.2s ease-in-out,
+                left 0.2s ease-in-out,
+                right 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+#navbar-menu.sidebar,
+#navbar-menu.sidebar.left {
+    left: -1000px;
+    right: 0;
+}
+
+#navbar-menu.sidebar.right {
+    right: -1000px;
+    left: 0;
+}
+
+#navbar-menu.detached,
+#navbar-menu.attached {
+    left: 0;
+    right: 0;
+}
+
+#navbar.opened #navbar-menu {
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    visibility: visible;
+}
+
+#navbar.opened #navbar-menu.sidebar.left {
+    left: 0;
+}
+
+#navbar.opened #navbar-menu.sidebar.right {
+    right: 0;
+}
+
+.navbar-links {
+    list-style-type: none;
+    max-height: 0;
+    overflow: hidden;
+    position: absolute;
+    background-color: var(--navbar-bg-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#navbar.opened .navbar-links {
+    padding: 1em;
+    max-height: none;
+}
+
+.sidebar .navbar-links {
+    top: 0;
+    bottom: 0;
+}
+
+.left.sidebar .navbar-links {
+    left: 0;
+    right: unset;
+    box-shadow: 5px 20px 20px rgba(0, 0, 0, 0.3);
+}
+
+.right.sidebar .navbar-links {
+    right: 0;
+    left: unset;
+    box-shadow: -5px 20px 20px rgba(0, 0, 0, 0.3);
+}
+
+.detached .navbar-links {
+    left: 0;
+    right: 0;
+    margin: 1.4rem;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.attached .navbar-links {
+    left: 0;
+    right: 0;
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-item {
+    margin: 0.4em;
+}
+
+@media screen and (min-width: 700px) {
+    .navbar-toggle {
+        display: none;
+    }
+    
+    #navbar #navbar-menu,
+    #navbar.opened #navbar-menu {
+        visibility: visible;
+        opacity: 1;
+        position: static;
+        display: block;
+        height: 100%;
+    }
+
+    #navbar .navbar-links,
+    #navbar.opened .navbar-links {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        position: static;
+        flex-direction: row;
+        list-style-type: none;
+        max-height: max-content;
+        width: 100%;
+        height: 100%;
+    }
+
+    #navbar .navbar-link:last-child {
+        margin-right: 0;
+    }
+}
+
+#options {
+    display: flex;
+    flex-direction: column;
+}
+    /* =======Form========== */
+    .uploadImage{
+      border: 2px solid #232323;
+      padding: .4rem .5rem;
+      margin-bottom: 1rem;
+    }
+     .admin-title{
+       text-align: center;
+       padding: 2rem 4rem 0 4rem;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+     }
+     @media(max-width: 600px){
+        .admin-title{
+        padding: 2rem 2rem 0 2rem;
+     }
+     }
+     .admin-title .deletePost{
+        text-decoration: none;
+        padding: .4rem 1rem;
+        background-color: #e75b65;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        border-radius: 4px;
+        font-weight: 500;
+        letter-spacing: .5px;
+        cursor: pointer;
+     }
+     .admin-title h2{
+      font-weight: 600;
+      font-size: 1.6rem;
+     }
+     .pg-footer{
+      display: none;
+     }
+     .postBox{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: .5rem 4rem;
+
+     }
+     .postBox input, .postBox textarea{
+      display: block;
+     }
+     .postBox label{
+      margin-bottom: .5rem;
+     }
+     .postBox ::placeholder{
+      font-weight: 500;
+      color: #666;
+     }
+     .postBox .postTitle{
+      height: 2rem;
+      margin-bottom: 1.2rem;
+      padding: 0rem .5rem;
+      font-family: 'Montserrat', sans-serif;
+      color: #000;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .6px;
+      border: 2px solid #232323;
+      border-radius: 0px;
+     }
+     .postBox .postTitle:focus{
+     border-radius: 0px;
+     }
+     .postBox .postTitle:active{
+     border-radius: 0px;
+     }
+     .postBox .postContent{
+      margin-bottom: 1.2rem;
+      padding:  .5rem;
+      font-family: 'Montserrat', sans-serif;
+      color: #000;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .6px;
+      border: 2px solid #232323;
+      border-radius: 0px;
+      min-height: 18rem;
+     }
+     .postBox .postBtn{
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: .6px;
+      font-size: 1rem;
+      background-color: #222;
+      padding: .5rem 0;
+      margin-top: 1rem;
+      cursor: pointer;
+     }
+     .modal .btn-close:focus{
+        box-shadow: none;
+     }
+     #deletePost .modal-body{
+       padding: 2rem 1.6rem;
+     }
+     #deletePost .modal-body .deleteContent h2{
+       font-weight: 600;
+       color: #222;
+       font-size: 1.4rem;
+       margin-bottom: 1rem;
+     }
+     #deletePost .modal-body .deleteContent p{
+       font-weight: 500;
+       color: #444;
+       font-size: 1rem;
+       margin-bottom: .8rem;
+     }
+     #deletePost .modalBtns{
+        margin-top: 1.2rem;
+     }
+     #deletePost .modalBtns button{
+        padding: .4rem 1rem;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        background-color: transparent;
+        letter-spacing: .6px;
+        font-weight: 500;
+     }
+     #deletePost .modalBtns  .deleteBtn{
+       background-color: #e75b65;
+       color: #fff;
+       border: 2px solid #e75b65;
+     }
+     #deletePost .cancleBtn{
+        border: 2px solid #777777 !important;
+        margin-right: 1rem;
+        color: #777777 !important;
+     }
+     @media(max-width: 768px){
+      .postBox {
+            padding: 0.5rem 1rem;
+        }
+     }
+  </style>
+</head>
+<body>
+  <header id="navbar">
+    <nav class="navbar-container container">
+      <a href="./list-blogs.html" class="navbar-logo">
+         Chartered<span>ONE</span>  <small>Admin</small>
+      </a>
+      <button type="button" class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navbar-menu">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+      <div id="navbar-menu" class="detached">
+        <ul class="navbar-links">
+          <li class="navbar-item"><a class="navbar-link" href="https://charteredone.com/" target="_blank">Visit Site</a></li>
+          <li class="navbar-item"><a class="navbar-link" href="./list-blogs.html">Blogs</a></li>
+          <li class="navbar-item"><a class="navbar-link" href="./login.html">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+</header>
+  <div class="admin-title">
+    <div></div>
+    <h2 class="text-center">Edit Post</h2>
+    <a href="deletePost" class="deletePost" data-bs-toggle="modal" data-bs-target="#deletePost">
+      Delete
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+      </svg>
+    </a>
+  </div>
+  <form action="someWhere" method="POST" class="postBox">
+    <label for="title"><b>Title</b></label>
+    <input type="text" placeholder="Post Title" name="title" class="postTitle" required>
+    <label for="title"><b>Description</b></label>
+    <input type="text" placeholder="Post Description" name="description" class="postTitle" required>
+    <label for="title"><b>Upload Image</b></label>
+    <input type="file" placeholder="Post Slug" name="image" class="uploadImage" accept="png, jpg" required>
+  
+    <label for="body"><b>Post Content</b></label>
+    <textarea name="body" cols="50" rows="10" class="postContent" required></textarea >
+    <input type="submit" value="Update Post" class="postBtn">
+  </form>
+  <!-- ===================Delete Modal============= -->
+  <div class="modal fade" id="deletePost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="deleteContent">
+                <h2>Are you sure want to delete this post?</h2>
+                <p>This will delete this post permanently. You can not undo this action.</p>
+            </div>
+            <div class="modalBtns">
+                <button type="button" class="cancleBtn" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="deleteBtn">Delete Anyway</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    const navbar = document.getElementById("navbar");
+    const navbarToggle = navbar.querySelector(".navbar-toggle");
+
+    function openMobileNavbar() {
+    navbar.classList.add("opened");
+    navbarToggle.setAttribute("aria-expanded", "true");
+    }
+
+    function closeMobileNavbar() {
+    navbar.classList.remove("opened");
+    navbarToggle.setAttribute("aria-expanded", "false");
+    }
+
+    navbarToggle.addEventListener("click", () => {
+    if (navbar.classList.contains("opened")) {
+    closeMobileNavbar();
+    } else {
+    openMobileNavbar();
+    }
+    });
+
+    const navbarMenu = navbar.querySelector("#navbar-menu");
+    const navbarLinksContainer = navbar.querySelector(".navbar-links");
+
+    navbarLinksContainer.addEventListener("click", (clickEvent) => {
+    clickEvent.stopPropagation();
+    });
+
+    navbarMenu.addEventListener("click", closeMobileNavbar);
+
+    document
+    .getElementById("options")
+    .querySelectorAll("input[name='navtype']")
+    .forEach((option) => {
+    option.addEventListener("change", (e) => {
+    const navType = e.target.id.split("-").join(" ");
+    navbarMenu.classList = navType;
+    });
+    });
+</script>
+</body>
+</html>
